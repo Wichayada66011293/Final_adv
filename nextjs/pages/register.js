@@ -64,35 +64,43 @@ export default function AuthPage() {
 
 
    try {
-     const response = await fetch('/api/users/create', {
-       method: 'POST',
-       headers: {
-         'Content-Type': 'application/json',
-       },
-       body: JSON.stringify({
-         username: registerName,
-         email: registerEmail,
-         password_hash: registerPassword,
-       }),
-     });
-
-
-     if (!response.ok) {
-       const errorData = await response.json();
-       throw new Error(errorData.detail || 'Registration failed');
-     }
-
-
-     const data = await response.json();
-     setSnackbarMessage('Registration successful!');
-     setSnackbarSeverity('success');
-     setOpenSnackbar(true);
-     // Handle successful registration (e.g., redirect)
-   } catch (error) {
-     setSnackbarMessage(error.message);
-     setSnackbarSeverity('error');
-     setOpenSnackbar(true);
-   }
+    const response = await fetch('/api/users/create', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        username: registerName,
+        email: registerEmail,
+        password_hash: registerPassword,
+      }),
+    });
+  
+    if (!response.ok) {
+      const errorData = await response.json();
+      let errorMessage = 'Registration failed';
+      
+      // Check if errorData contains any meaningful message
+      if (errorData && errorData.detail) {
+        errorMessage = errorData.detail;
+      } else if (errorData && typeof errorData === 'object') {
+        errorMessage = JSON.stringify(errorData);
+      }
+  
+      throw new Error(errorMessage);
+    }
+  
+    const data = await response.json();
+    setSnackbarMessage('Registration successful!');
+    setSnackbarSeverity('success');
+    setOpenSnackbar(true);
+    // Handle successful registration (e.g., redirect)
+  } catch (error) {
+    setSnackbarMessage(error.message);
+    setSnackbarSeverity('error');
+    setOpenSnackbar(true);
+  }
+  
  };
 
 
@@ -140,9 +148,10 @@ export default function AuthPage() {
              value={registerConfirmPassword}
              onChange={(e) => setRegisterConfirmPassword(e.target.value)}
            />
-           <Button variant="contained" color="primary" fullWidth style={{ marginTop: '16px' }} type="submit" href="/login">
-             Register
-           </Button>
+           <Button variant="contained" color="primary" fullWidth style={{ marginTop: '16px' }} type="submit">
+            Register
+          </Button>
+
          </form>
        </Paper>
      </Grid>
