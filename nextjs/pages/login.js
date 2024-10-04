@@ -115,12 +115,12 @@ export default function AuthPage() {
               onChange={(e) => setLoginPassword(e.target.value)}
             />
             <Box display="flex" alignItems="center" justifyContent="space-between" mt={2}>
-              <Button variant="contained" color="primary" type="submit">
+              <Button variant="contained" color="primary" type="submit" href="/menu">
                 Login
               </Button>
               <Box display="flex" alignItems="center">
                 <Typography variant="body2" style={{ marginRight: '8px' }}>New Player?</Typography>
-                <Button variant="contained" color="secondary" href="/register">
+                <Button variant="contained" color="secondary" href="/register" >
                   Register
                 </Button>
               </Box>
